@@ -5,6 +5,9 @@ notes
 
 CNAME
 
+# IDEs
+.idea
+
 # Logs
 logs
 *.log
