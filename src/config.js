@@ -14,7 +14,7 @@ export default {
   downMovementRate: 20,
   pauseRate: 2,
 
-  playMusic: true,
+  playMusic: false,
 
   htmlBackgroundColor: '#371B52',
   backgroundColor: '#00263F',
