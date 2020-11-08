@@ -23,6 +23,7 @@
   },
 
   "dependencies": {
+    "@scillgame/scill-js": "^0.5.0",
     "ava": "^0.18.0",
     "comma-number": "^1.1.0",
     "lodash": "^4.17.4",
