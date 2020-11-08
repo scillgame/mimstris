@@ -13,6 +13,7 @@ import ConfigPanel from './ConfigPanel'
 import Music from './Music'
 
 import Instructions from '../components/Instructions'
+import Challenges from './Challenges'
 
 const [BOARD_WIDTH, BOARD_HEIGHT] = config.boardSize
 const CANVAS_WIDTH = BOARD_WIDTH * config.blockSize
@@ -44,6 +45,9 @@ const App = props => (
       <StatusMessage />
       <Instructions />
       <Music isPlaying={props.musicPlaying} />
+    </div>
+    <div className='challengesWrapper' style={{width: 200, height: CANVAS_HEIGHT, marginRight: '1rem'}}>
+      <Challenges />
     </div>
   </div>
 )
