@@ -100,15 +100,23 @@ class Challenges extends React.Component {
         categories.forEach(categories => {
           categories.challenges.forEach(challenge => {
             if (challenge.type === 'unlock') {
+              console.log("Unlocking challenge", challenge);
               challengesApi.unlockPersonalChallenge(scillinfo.appId, challenge.challenge_id).then(response => {
-                console.log("Challenge unlocked");
+                console.log("Challenge unlocked, now activating", challenge);
                 challengesApi.activatePersonalChallenge(scillinfo.appId, challenge.challenge_id).then(response => {
-                  console.log("Challenge activated");
+                  console.log("Challenge activated", challenge);
+                }).catch(error => {
+                  console.log("Failed to activate challenge", error, challenge);
                 });
+              }).catch(error => {
+                console.warn("Failed to unlock challenge", error, challenge);
               });
             } else if (challenge.type === 'unlocked') {
+              console.log("Challenge is unlocked, activating", challenge);
               challengesApi.activatePersonalChallenge(scillinfo.appId, challenge.challenge_id).then(response => {
-                console.log("Challenge activated");
+                console.log("Challenge activated", challenge);
+              }).catch(error => {
+                console.log("Failed to activate challenge", error, challenge);
               });
             }
           })
