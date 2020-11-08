@@ -134,3 +134,53 @@ button:focus {
   text-align: center;
   vertical-align: middle;
 }
+
+.category {
+  margin-bottom: 20px;
+}
+
+category h3 {
+  margin-top: 0px;
+}
+
+.challenge {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.challenge img {
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
+}
+
+.challenge.finished {
+  text-decoration: line-through;
+}
+
+.challenge h4 {
+  margin: 0px;
+}
+
+.challenge-progress {
+  display: flex;
+  align-items: center;
+}
+
+.challenge-progress-bar-container {
+  height: 4px;
+  background-color: #000;
+  width: 100%;
+}
+
+.challenge-progress-bar {
+  height: 4px;
+  background-color: red;
+}
+
+.challenge-status {
+  margin-left: 10px;
+}
