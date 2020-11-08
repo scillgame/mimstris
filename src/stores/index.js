@@ -7,6 +7,9 @@ import currentPiece from './currentPiece'
 import board from './board'
 import config from './config'
 import gameState from './gameState'
+import challenges from './challenges'
+import session from './session'
+import user from './user'
 // selector-only modules
 // import message from './message'
 // import fallRate from './fallRate'
@@ -19,7 +22,7 @@ export const replaceState = (state) => ({
 })
 
 export const reducer = combineReducers(
-  {score, lines, nextPiece, currentPiece, board, gameState, config}
+  {score, lines, nextPiece, currentPiece, board, gameState, config, session, user, challenges}
 )
 
 export default createStore(
