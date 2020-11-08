@@ -216,7 +216,8 @@ function update (currentTime) {
 }
 
 function buttonPresed (buttons) {
-  if (!getGamepad) { return false }
+  return;
+  if (!getGamepad || !getGamepad().buttons) { return false }
 
   return buttons.reduce((result, buttonId) => {
     let button = getGamepad().buttons[buttonId]
@@ -231,6 +232,7 @@ function buttonPresed (buttons) {
 }
 
 function axisPressed (axisId, direction = 1) {
+  return;
   if (!getGamepad) { return false }
 
   let axis = getGamepad().axes[axisId]
