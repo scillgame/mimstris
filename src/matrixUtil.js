@@ -23,6 +23,10 @@ export const getFullRows = matrix => (
   }, [])
 )
 
+export const allEqual = (row) => {
+  return new Set(row).size == 1;
+}
+
 export const createEmptyArray = length => times(length, constant(0))
 
 export const removeRow = (matrix, rowIndex) => {

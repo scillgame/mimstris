@@ -26,6 +26,17 @@ import * as board from './stores/board'
 import * as gameState from './stores/gameState'
 import * as configStore from './stores/config'
 import * as history from './stores/history'
+import * as session from './stores/session'
+import * as user from './stores/user'
+
+// SCILL
+import * as SCILL from '@scillgame/scill-js'
+import scillinfo from './scillinfo'
+
+// Create EventsApi instance. Please note: The api key should not be exposed in clients, this is just for demonstration usage
+// You should always create a backend to create an access token for a user id. You can also instantiate the EventsApi
+// instance with the access token, which will not expose your API-key.
+export const eventsApi = SCILL.getEventsApi(scillinfo.apiKey, 'development')
 
 // Shortcuts to getters and dispatching actions
 const dispatch = store.dispatch
@@ -39,8 +50,26 @@ const getFallRate = () => wrapGetter(fallRate.getFallRate)
 const getGameState = () => wrapGetter(gameState.getGameState)
 const getDeterministicMode = () => wrapGetter(configStore.getDeterministicMode)
 const getActivePieces = () => wrapGetter(configStore.getActivePieces)
+const getSessionId = () => wrapGetter(session.getSessionId)
+const getUser = () => wrapGetter(user.getUser)
 
-const startGame = () => dispatch(gameState.setGameState(gameState.GAME_STATE_RUNNING))
+const startGame = () => {
+  dispatch(gameState.setGameState(gameState.GAME_STATE_RUNNING))
+
+  eventsApi.sendEvent({
+    event_name: 'trigger-event',
+    event_type: 'single',
+    user_id: getUser().userId,
+    session_id: getSessionId(),
+    meta_data: {
+      amount: 1,
+      event_type: 'match-start'
+    }
+  }).then(() => {
+    console.log("Trigger-event match-start sent");
+  })
+
+}
 const pauseGame = () => dispatch(gameState.setGameState(gameState.GAME_STATE_PAUSED))
 const unpauseGame = () => dispatch(gameState.setGameState(gameState.GAME_STATE_RUNNING))
 const endGame = () => dispatch(gameState.setGameState(gameState.GAME_STATE_GAME_OVER))
@@ -50,6 +79,7 @@ const movePieceRight = (piece) => dispatch(currentPiece.movePieceRight(getBoard(
 const rotatePieceRight = (piece) => dispatch(currentPiece.rotateRight(getBoard()))
 const rotatePieceLeft = (piece) => dispatch(currentPiece.rotateLeft(getBoard()))
 const randomizeNextPiece = () => dispatch(nextPiece.setNextPiece(getRandomPiece()))
+const updateSessionId = () => dispatch(session.updateSessionId(new Date().getTime().toString()))
 const makeNextPieceCurrent = () => {
   const nextPiece = centerPiece(getNextPiece())
   dispatch(currentPiece.setCurrentPiece(nextPiece))
@@ -173,6 +203,9 @@ function resetGame () {
   pauseRate = config.pauseRate
 
   history.resetHistory()
+
+  // Update Session Id
+  updateSessionId()
 
   // reset game objects
   dispatch(board.resetBoard())
@@ -375,6 +408,38 @@ function clearCompletedLines () {
     dispatch(score.addClearedLineScore(numberOfClearedLines, getLevel()))
     dispatch(lines.setLines(getLines() + numberOfClearedLines))
     dispatch(board.clearCompletedLines())
+
+    // Send SCILL Event for destroying lines
+    const eventPayload = {
+      event_name: 'destroy-item',
+      event_type: 'single',
+      session_id: getSessionId(),
+      user_id: getUser().userId,
+      meta_data: {
+        amount: numberOfClearedLines,
+        item_id: 'line'
+      }
+    }
+    eventsApi.sendEvent(eventPayload).then(() => {
+      console.log("Destroy-item event sent", eventPayload);
+    })
+
+    // If number of lines is 5+ destroyed at once we send a monsterline event
+    if (numberOfClearedLines >= 4) {
+      const eventPayload = {
+        event_name: 'destroy-item',
+        event_type: 'single',
+        session_id: getSessionId(),
+        user_id: getUser().userId,
+        meta_data: {
+          amount: 1,
+          item_id: 'block'
+        }
+      }
+      eventsApi.sendEvent(eventPayload).then(() => {
+        console.log("Monsterline event sent", eventPayload);
+      })
+    }
   }
 }
 
