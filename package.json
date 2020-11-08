@@ -19,7 +19,7 @@
     "coverage": "nyc npm run test",
     "build": "webpack --config webpack.config.babel.js --env production",
     "watch": "webpack-dev-server --open --env development",
-    "start": "npm run lint && npm run test && npm run watch"
+    "start": "npm run lint && npm run watch"
   },
 
   "dependencies": {
