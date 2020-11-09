@@ -7,12 +7,14 @@ import {getScore} from '../stores/score'
 
 import ScoreboardText from '../components/ScoreboardText'
 import { getSessionId } from '../stores/session'
+import { getUser } from '../stores/user'
 
 const mapStateToProps = (state) => ({
   level: commaNumber(getLevel(state)),
   lines: commaNumber(getLines(state)),
   score: commaNumber(getScore(state)),
-  session: getSessionId(state)
+  session: getSessionId(state),
+  user: getUser(state)
 })
 
 const Scoreboard = props => (
@@ -20,7 +22,8 @@ const Scoreboard = props => (
     <ScoreboardText label='Level' value={props.level} />
     <ScoreboardText label='Score' value={props.score} />
     <ScoreboardText label='Lines' value={props.lines} />
-    <ScoreboardText label='session' value={props.session} />
+    <ScoreboardText label='Session' value={props.session} />
+    <ScoreboardText label='User' value={props.user.userId} />
   </div>
 )
 
