@@ -50,6 +50,8 @@ function ChallengeProgress(props) {
 // touching the code.
 export const RewardPieces = '#YH';
 
+let webSocket = null;
+
 class Challenges extends React.Component {
 
   constructor (props) {
@@ -123,13 +125,29 @@ class Challenges extends React.Component {
         })
       });
 
-      setInterval(() => {
-        challengesApi.getPersonalChallenges(scillinfo.appId).then(categories => {
-          this.props.updateChallenges(categories);
-          this.claimRewards(categories);
-        });
-      }, 1000);
+      this.setupWebsocket();
     });
+  }
+
+  loadChallenges() {
+    const challengesApi = SCILL.getChallengesApi(this.props.user.accessToken, scillinfo.environment);
+    challengesApi.getPersonalChallenges(scillinfo.appId).then(categories => {
+      this.props.updateChallenges(categories);
+      this.claimRewards(categories);
+    });
+  }
+
+  setupWebsocket() {
+    webSocket = new WebSocket(`ws${window.location.protocol === 'https:' ? 's' : ''}://demo.release.app.scillplay.com/scill/ws/challenges/${scillinfo.appId}/${this.props.user.userId}/${new Date().getTime()}?environment=${scillinfo.environment}`);
+    webSocket.onmessage = (event) => {
+      console.log('Received Webhook', event.data);
+      this.loadChallenges();
+    }
+
+    webSocket.onclose = (event) => {
+      console.log("Websocket closed, reconnecting");
+      this.setupWebsocket();
+    }
   }
 
   render () {
