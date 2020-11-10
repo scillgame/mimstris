@@ -207,6 +207,22 @@ function resetGame () {
   // Update Session Id
   updateSessionId()
 
+  // Send a "reset" event to reset the line counter every game
+  // Send SCILL Event for destroying lines
+  const eventPayload = {
+    event_name: 'destroy-item',
+    event_type: 'group', // group sets the counter to amount instead of incrementing it by that
+    session_id: getSessionId(),
+    user_id: getUser().userId,
+    meta_data: {
+      amount: 0,
+      item_id: 'line'
+    }
+  }
+  eventsApi.sendEvent(eventPayload).then(() => {
+    console.log("Reset destroy-item event sent", eventPayload);
+  })
+
   // reset game objects
   dispatch(board.resetBoard())
   dispatch(score.resetScore())
