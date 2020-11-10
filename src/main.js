@@ -36,7 +36,7 @@ import scillinfo from './scillinfo'
 // Create EventsApi instance. Please note: The api key should not be exposed in clients, this is just for demonstration usage
 // You should always create a backend to create an access token for a user id. You can also instantiate the EventsApi
 // instance with the access token, which will not expose your API-key.
-export const eventsApi = SCILL.getEventsApi(scillinfo.apiKey, 'development')
+export const eventsApi = SCILL.getEventsApi(scillinfo.apiKey, scillinfo.environment)
 
 // Shortcuts to getters and dispatching actions
 const dispatch = store.dispatch
