@@ -87,6 +87,30 @@ class Challenges extends React.Component {
     }
   }
 
+  claimReward(challenge) {
+    let activePieces = this.props.activePieces
+    if (challenge.type === 'unclaimed') {
+      // The challenge is achieved, find the piece to unlock and add to the active pieces list
+      const reward_index = challenge.challenge_reward
+      if (reward_index >= RewardPieces.length) {
+        console.error("Reward index is out of bounds the RewardPieces", reward_index, RewardPieces)
+      } else {
+        // In Admin Panel we can set an integer value for challenge_reward. We use that integer to find the char
+        // in the list of unlockables and add it to the list.
+        const piece = RewardPieces.charAt(reward_index)
+        if (piece) {
+          if (!activePieces.includes(piece)) {
+            activePieces += piece
+          }
+        }
+      }
+    }
+    if (activePieces != this.props.activePieces) {
+      console.log("SETTING ACTIVE PIECES", activePieces);
+      this.props.setActivePieces(activePieces)
+    }
+  }
+
   componentDidMount () {
     // Create an access token - this should also be done in the backend to not expose the API key
     const authApi = SCILL.getAuthApi(scillinfo.apiKey, scillinfo.environment);
@@ -145,6 +169,7 @@ class Challenges extends React.Component {
       console.log('Received Webhook', data);
       // Find the challenge with the same id and update local properties
       this.props.updateChallenge(data.new_challenge);
+      this.claimReward(data.new_challenge);
     }
 
     webSocket.onclose = (event) => {
