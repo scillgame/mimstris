@@ -154,14 +154,6 @@ class Challenges extends React.Component {
     });
   }
 
-  loadChallenges() {
-    const challengesApi = SCILL.getChallengesApi(this.props.user.accessToken, scillinfo.environment);
-    challengesApi.getPersonalChallenges(scillinfo.appId).then(categories => {
-      this.props.updateChallenges(categories);
-      this.claimRewards(categories);
-    });
-  }
-
   setupWebsocket() {
     webSocket = new WebSocket(`ws${window.location.protocol === 'https:' ? 's' : ''}://demo.release.app.scillplay.com/scill/ws/challenges/${scillinfo.appId}/${this.props.user.userId}/${new Date().getTime()}?environment=${scillinfo.environment}`);
     webSocket.onmessage = (event) => {
