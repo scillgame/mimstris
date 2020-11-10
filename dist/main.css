@@ -157,7 +157,7 @@ category h3 {
   margin-right: 5px;
 }
 
-.challenge.finished {
+.challenge.finished .challenge-name {
   text-decoration: line-through;
 }
 
