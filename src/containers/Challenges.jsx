@@ -11,7 +11,7 @@ import * as config from '../stores/config'
 import * as session from '../stores/session'
 import * as user from '../stores/user'
 import scillinfo from '../scillinfo'
-import { updateChallenges } from '../stores/challenges'
+import { updateChallenge, updateChallenges } from '../stores/challenges'
 
 const mapStateToProps = (state) => {
   return {
@@ -28,6 +28,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   updateAccessToken: (accessToken) => { dispatch(user.updateAccessToken(accessToken)) },
   updateChallenges: (challenges) => { dispatch(challengeStore.updateChallenges(challenges)) },
+  updateChallenge: (challenge) => { dispatch(challengeStore.updateChallenge(challenge)) },
   setActivePieces: (activePieces) => { dispatch(config.setActivePieces(activePieces)) }
 })
 
@@ -140,8 +141,10 @@ class Challenges extends React.Component {
   setupWebsocket() {
     webSocket = new WebSocket(`ws${window.location.protocol === 'https:' ? 's' : ''}://demo.release.app.scillplay.com/scill/ws/challenges/${scillinfo.appId}/${this.props.user.userId}/${new Date().getTime()}?environment=${scillinfo.environment}`);
     webSocket.onmessage = (event) => {
-      console.log('Received Webhook', event.data);
-      this.loadChallenges();
+      const data = JSON.parse(event.data);
+      console.log('Received Webhook', data);
+      // Find the challenge with the same id and update local properties
+      this.props.updateChallenge(data.new_challenge);
     }
 
     webSocket.onclose = (event) => {
