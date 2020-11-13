@@ -13,7 +13,7 @@ of us, because it's such an interesting challenge to solve.
 
 Try yourself: 
 * [Original version of the game](https://mimstris.surge.sh) 
-* [Tetris powered by SCILL challenges](https://mimstris.surge.sh) 
+* [Tetris powered by SCILL challenges](https://scill-tetris.web.app/) 
 
 ## SCILL Challenges
 
@@ -54,7 +54,7 @@ An arcade puzzle game created in JS using [React](https://facebook.github.io/rea
 
 **This game is open-source, free, and just for funsies!**
 
-## 👉 [Play Now!](https://mimstris.surge.sh)  🎮 📺
+## 👉 [Play Now!](https://scill-tetris.web.app/)  🎮 📺
 
 [![Screen Shot](screenshot.gif)](htts://mimstris.surge.sh)
 
