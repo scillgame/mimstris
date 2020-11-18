@@ -155,7 +155,7 @@ class Challenges extends React.Component {
   }
 
   setupWebsocket() {
-    webSocket = new WebSocket(`ws${window.location.protocol === 'https:' ? 's' : ''}://demo.release.app.scillplay.com/scill/ws/challenges/${scillinfo.appId}/${this.props.user.userId}/${new Date().getTime()}?environment=${scillinfo.environment}`);
+    webSocket = new WebSocket(`ws${window.location.protocol === 'https:' ? 's' : ''}://playground.scillgame.com/scill/ws/challenges/${scillinfo.appId}/${this.props.user.userId}/${new Date().getTime()}?environment=${scillinfo.environment}`);
     webSocket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       console.log('Received Webhook', data);
